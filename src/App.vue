@@ -1,5 +1,6 @@
 <template>
   <router-view/>
+  <h1>Hola Mundo</h1>
 </template>
 
 <script>
