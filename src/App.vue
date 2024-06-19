@@ -1,17 +1,10 @@
 <template>
   <router-view/>
-  <h1>Hola Mundo</h1>
 </template>
 
 <script>
-import Prueba from './views/Prueba.vue'
-import Test from './views/Test.vue'
-
 export default {
   name:'App',
-  components: {
-    Test, Prueba
-  }
 }
 </script>
 

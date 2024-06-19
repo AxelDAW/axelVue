@@ -8,10 +8,13 @@
     <button @click="borrarCarrito">Borrar carrito.</button>
 
     <RouterLink to="/prueba">Ir a Prueba.</RouterLink>
-
+    <RouterLink @click="borrar" to="/login">Volver atrás.</RouterLink>
+    <button @click="desloguearse">Salir</button>
     <div class="box">
         <h3>Hola</h3>
     </div>
+
+    <button @click="buscar">Mostrar datos.</button>
 
 </template>
 
@@ -19,7 +22,6 @@
 import ListaAlimentos from '@/components/ListaAlimentos.vue'
 import CarritoCompra from '@/components/CarritoCompra.vue'
 import MisDatos from '../misdatos.json';
-import { calculoSuma } from '@/helpers/Calculos';
 
 export default {
     name:'Test',
@@ -35,6 +37,10 @@ export default {
             lista: [{nombre: "Tomates", precio: 2}, {nombre: "Pescado", precio: 12}, {nombre: "Huevos", precio: 1}, {nombre: "Carne", precio: 8}],
             carrito: [],
             usuarios: [],
+            usuario: localStorage.getItem('usuario'),
+            contraseña: localStorage.getItem('contraseña'),
+            username: '',
+            email: ''
         }
     },
     methods: {
@@ -48,34 +54,46 @@ export default {
             this.carrito = []
         },
 
-        consultaUsuarios(){
-            fetch("https://jsonplaceholder.typicode.com/users")
-            .then(response => {
-                if (response.ok){
-                    return response.json()
-                }
-                throw new Error(response.status);
-            })
-            .then(data=> {
-                this.usuarios = data;
-            })
-            .catch(err => {
-                console.error("Error: ", err.mesage)
+        borrar(){
+            localStorage.removeItem('usuario');
+            localStorage.removeItem('contraseña');
+        },
+        desloguearse(){
+            localStorage.removeItem('usuario');
+            localStorage.removeItem('contraseña');
+            this.$router.push('/login');
+        },
+
+        consultaUsuarios( username, email ){
+            
+            return new Promise( (resolve) => {
+
+                setTimeout(()=>{
+
+                    let datosDevolver = [];
+                    MisDatos.map( k => { datosDevolver.push( { username: k.username + '_ALPESA', email: k.email } ) } );
+                    resolve( datosDevolver )
+
+                }, 3000)
+
             })            
-        }
+
+        },
+
+        async buscar(){
+
+            let encontrado = await this.consultaUsuarios( this.username, this.email );
+
+
+                console.log("test")
+                console.log(encontrado);
+
+
+        },
+        
     },
 
-
-    mounted(){
-        
-        console.log( MisDatos.filter( k => {
-            return k.username.startsWith('A')
-        } ) );
-
-        console.log( calculoSuma( 2, 4 ) );
-        /* this.consultaUsuarios(); */
-
-    }
+    
 
 }
 </script>
